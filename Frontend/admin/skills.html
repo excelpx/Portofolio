@@ -1,0 +1,60 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <section>
+        <div class="page-title">Manajemen Skills</div>
+        <div style="margin-top:1.5rem; display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+            <p>Kelola daftar skills yang ditampilkan di halaman utama.</p>
+            <button class="btn" id="open-skill-modal">Tambah Skill</button>
+        </div>
+
+        <div class="table-wrapper" style="margin-top:1.5rem;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Skill</th>
+                        <th>Kategori</th>
+                        <th>Persentase</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for skill in skills %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ skill.nama_skill }}</td>
+                        <td>{{ skill.kategori_skill }}</td>
+                        <td>{{ skill.persentase_keahlian }}%</td>
+                        <td>
+                            <button class="btn edit-skill" data-id="{{ skill.id }}" data-nama="{{ skill.nama_skill }}" data-kategori="{{ skill.kategori_skill }}" data-persen="{{ skill.persentase_keahlian }}">Edit</button>
+                            <button class="btn" data-id="{{ skill.id }}" data-action="delete">Hapus</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="modal" id="skill-modal">
+        <div class="modal-content">
+            <span class="modal-close" id="close-skill-modal">×</span>
+            <h2 id="skill-modal-title">Tambah Skill</h2>
+            <form id="skill-form" action="/skills/add" method="POST">
+                <div class="form-grid">
+                    <label for="nama_skill">Nama Skill</label>
+                    <input id="nama_skill" name="nama_skill" type="text" required />
+
+                    <label for="kategori_skill">Kategori</label>
+                    <input id="kategori_skill" name="kategori_skill" type="text" required />
+
+                    <label for="persentase_keahlian">Persentase Keahlian</label>
+                    <input id="persentase_keahlian" name="persentase_keahlian" type="number" min="0" max="100" value="50" required />
+                </div>
+                <input type="hidden" id="skill-id" name="skill_id" />
+                <button class="btn" type="submit">Simpan</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

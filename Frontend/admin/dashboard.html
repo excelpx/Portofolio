@@ -1,0 +1,25 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <section>
+        <div class="page-title">Dashboard</div>
+        <div class="card-grid" style="margin-top:1.5rem;">
+            <div class="card">
+                <h3>Total Skill</h3>
+                <strong>{{ totals.skill }}</strong>
+            </div>
+            <div class="card">
+                <h3>Total Pengalaman</h3>
+                <strong>{{ totals.pengalaman }}</strong>
+            </div>
+            <div class="card">
+                <h3>Total Proyek</h3>
+                <strong>{{ totals.proyek }}</strong>
+            </div>
+            <div class="card">
+                <h3>Total Kontak</h3>
+                <strong>{{ totals.kontak }}</strong>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <section>
+        <div class="page-title">Manajemen Profil</div>
+        <div style="margin-top:1.5rem; display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+            <p>Kelola profil utama portfolio Anda.</p>
+            <button class="btn" id="open-profile-modal">Tambah Profil</button>
+        </div>
+
+        <div class="table-wrapper" style="margin-top:1.5rem;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nama Lengkap</th>
+                        <th>Jabatan</th>
+                        <th>Foto</th>
+                        <th>Links</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for profile in profiles %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ profile.nama_lengkap }}</td>
+                        <td>{{ profile.jabatan }}</td>
+                        <td>{% if profile.foto_url %}<a href="{{ profile.foto_url }}" target="_blank">Preview</a>{% else %}-{% endif %}</td>
+                        <td>
+                            {% if profile.link_github %}<a href="{{ profile.link_github }}" target="_blank">GitHub</a>{% endif %}
+                            {% if profile.link_linkedin %}<a href="{{ profile.link_linkedin }}" target="_blank">LinkedIn</a>{% endif %}
+                            {% if profile.link_instagram %}<a href="{{ profile.link_instagram }}" target="_blank">Instagram</a>{% endif %}
+                        </td>
+                        <td>
+                            <button class="btn edit-profile" data-id="{{ profile.id }}" data-nama="{{ profile.nama_lengkap }}" data-jabatan="{{ profile.jabatan }}" data-bio="{{ profile.bio }}" data-github="{{ profile.link_github }}" data-linkedin="{{ profile.link_linkedin }}" data-instagram="{{ profile.link_instagram }}">Edit</button>
+                            <button class="btn" data-id="{{ profile.id }}" data-action="delete">Hapus</button>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align:center;color:#94A3B8;">Belum ada profil. Tambahkan profil baru.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="modal" id="profile-modal">
+        <div class="modal-content">
+            <span class="modal-close" id="close-profile-modal">×</span>
+            <h2 id="modal-title">Tambah Profil</h2>
+            <form id="profile-form" action="/profiles/add" method="POST" enctype="multipart/form-data">
+                <div class="form-grid">
+                    <label for="nama_lengkap">Nama Lengkap</label>
+                    <input id="nama_lengkap" name="nama_lengkap" type="text" required />
+
+                    <label for="jabatan">Jabatan</label>
+                    <input id="jabatan" name="jabatan" type="text" required />
+
+                    <label for="bio">Biografi</label>
+                    <textarea id="bio" name="bio" rows="4" required></textarea>
+
+                    <label for="foto">Foto Profil</label>
+                    <input id="foto" name="foto" type="file" accept="image/*" />
+
+                    <label for="link_github">Link GitHub</label>
+                    <input id="link_github" name="link_github" type="url" />
+
+                    <label for="link_linkedin">Link LinkedIn</label>
+                    <input id="link_linkedin" name="link_linkedin" type="url" />
+
+                    <label for="link_instagram">Link Instagram</label>
+                    <input id="link_instagram" name="link_instagram" type="url" />
+                </div>
+                <input type="hidden" id="profile-id" name="profile_id" />
+                <button class="btn" type="submit">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('open-profile-modal').addEventListener('click', () => {
+            document.getElementById('modal-title').textContent = 'Tambah Profil';
+            document.getElementById('profile-form').action = '/profiles/add';
+            document.getElementById('profile-id').value = '';
+            document.getElementById('profile-form').reset();
+            document.getElementById('profile-modal').classList.add('open');
+        });
+
+        document.getElementById('close-profile-modal').addEventListener('click', () => {
+            document.getElementById('profile-modal').classList.remove('open');
+        });
+
+        document.querySelectorAll('.edit-profile').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.target.dataset.id;
+                document.getElementById('modal-title').textContent = 'Edit Profil';
+                document.getElementById('profile-form').action = `/profiles/${id}/edit`;
+                document.getElementById('profile-id').value = id;
+                document.getElementById('nama_lengkap').value = e.target.dataset.nama;
+                document.getElementById('jabatan').value = e.target.dataset.jabatan;
+                document.getElementById('bio').value = e.target.dataset.bio;
+                document.getElementById('link_github').value = e.target.dataset.github || '';
+                document.getElementById('link_linkedin').value = e.target.dataset.linkedin || '';
+                document.getElementById('link_instagram').value = e.target.dataset.instagram || '';
+                document.getElementById('profile-modal').classList.add('open');
+            });
+        });
+
+        document.querySelectorAll('[data-action="delete"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (confirm('Yakin ingin menghapus?')) {
+                    const id = e.target.dataset.id;
+                    fetch(`/profiles/${id}/delete`, { method: 'POST' })
+                        .then(() => location.reload())
+                        .catch(err => alert('Error: ' + err));
+                }
+            });
+        });
+    </script>
+{% endblock %}

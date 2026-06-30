@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <style>
+        :root {
+            --bg:#0F172A;--surface:#111827;--surface-alt:#1F2937;--text:#E2E8F0;--muted:#94A3B8;--accent:#38BDF8;
+        }
+        *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif;}
+        body{min-height:100vh;background:#090E1A;color:var(--text);}
+        .layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+        .sidebar{background:var(--surface);padding:2rem 1.25rem;display:flex;flex-direction:column;gap:1.5rem;}
+        .brand{font-size:1.35rem;font-weight:700;letter-spacing:.08em;color:var(--accent);margin-bottom:1rem;}
+        .nav-link{color:var(--muted);display:block;padding:.85rem 1rem;border-radius:12px;transition:background .2s ease,color .2s ease;}
+        .nav-link:hover,.nav-link.active{background:rgba(56,189,248,.12);color:#fff;}
+        .content{background:linear-gradient(180deg,rgba(15,23,42,.96),#090E1A);padding:2rem;}
+        .page-title{font-size:clamp(1.75rem,2vw,2.4rem);margin-bottom:.75rem;}
+        .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;}
+        .card{background:var(--surface-alt);border:1px solid rgba(148,163,184,.12);border-radius:24px;padding:1.4rem;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+        .card h3{font-size:1rem;color:var(--muted);margin-bottom:.65rem;}
+        .card strong{font-size:2rem;display:block;}
+        .table-wrapper{overflow-x:auto;background:var(--surface-alt);border:1px solid rgba(148,163,184,.12);border-radius:24px;}
+        table{width:100%;border-collapse:collapse;}
+        th,td{padding:1rem 1.15rem;text-align:left;font-size:.95rem;border-bottom:1px solid rgba(148,163,184,.08);}
+        th{color:var(--muted);font-weight:600;}
+        .btn{display:inline-flex;align-items:center;justify-content:center;padding:.85rem 1.25rem;border-radius:999px;background:var(--accent);color:#fff;border:none;cursor:pointer;transition:transform .2s ease;}
+        .btn:hover{transform:translateY(-2px);}
+        .modal{position:fixed;inset:0;background:rgba(15,23,42,.75);display:none;align-items:center;justify-content:center;padding:1.5rem;z-index:50;}
+        .modal.open{display:flex;}
+        .modal-content{width:100%;max-width:720px;background:var(--surface);border-radius:24px;padding:2rem;position:relative;}
+        .modal-close{position:absolute;top:1rem;right:1rem;font-size:1.25rem;color:var(--muted);cursor:pointer;}
+        .form-grid{display:grid;gap:1rem;margin-top:1rem;}
+        input,textarea{width:100%;border:1px solid rgba(148,163,184,.18);border-radius:16px;background:rgba(255,255,255,.04);color:var(--text);padding:.95rem 1rem;}
+        textarea{min-height:140px;resize:vertical;}
+        @media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:.75rem;}.content{padding:1.25rem;}}
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">Admin Panel</div>
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+            <a class="nav-link" href="/profiles">Profil</a>
+            <a class="nav-link" href="/skills">Skill</a>
+            <a class="nav-link" href="/pengalaman">Pengalaman</a>
+            <a class="nav-link" href="/projects">Proyek</a>
+            <a class="nav-link" href="/logout">Logout</a>
+        </aside>
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='admin/js/projects.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/js/skills.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/js/experience.js') }}"></script>
+</body>
+</html>

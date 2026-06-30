@@ -1,0 +1,66 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <section>
+        <div class="page-title">Manajemen Pengalaman</div>
+        <div style="margin-top:1.5rem; display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+            <p>Kelola daftar pengalaman kerja yang muncul di halaman utama.</p>
+            <button class="btn" id="open-experience-modal">Tambah Pengalaman</button>
+        </div>
+
+        <div class="table-wrapper" style="margin-top:1.5rem;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Posisi</th>
+                        <th>Instansi</th>
+                        <th>Durasi</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pengalaman in pengalaman %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ pengalaman.posisi }}</td>
+                        <td>{{ pengalaman.nama_instansi }}</td>
+                        <td>{{ pengalaman.tanggal_mulai }} - {% if pengalaman.tanggal_selesai %}{{ pengalaman.tanggal_selesai }}{% else %}Sekarang{% endif %}</td>
+                        <td>
+                            <button class="btn edit-experience" data-id="{{ pengalaman.id }}" data-posisi="{{ pengalaman.posisi }}" data-instansi="{{ pengalaman.nama_instansi }}" data-mulai="{{ pengalaman.tanggal_mulai }}" data-selesai="{{ pengalaman.tanggal_selesai }}" data-deskripsi="{{ pengalaman.deskripsi_tugas }}">Edit</button>
+                            <button class="btn" data-id="{{ pengalaman.id }}" data-action="delete">Hapus</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="modal" id="experience-modal">
+        <div class="modal-content">
+            <span class="modal-close" id="close-experience-modal">×</span>
+            <h2 id="experience-modal-title">Tambah Pengalaman</h2>
+            <form id="experience-form" action="/pengalaman/add" method="POST">
+                <div class="form-grid">
+                    <label for="posisi">Posisi</label>
+                    <input id="posisi" name="posisi" type="text" required />
+
+                    <label for="nama_instansi">Nama Instansi</label>
+                    <input id="nama_instansi" name="nama_instansi" type="text" required />
+
+                    <label for="tanggal_mulai">Tanggal Mulai</label>
+                    <input id="tanggal_mulai" name="tanggal_mulai" type="date" required />
+
+                    <label for="tanggal_selesai">Tanggal Selesai</label>
+                    <input id="tanggal_selesai" name="tanggal_selesai" type="date" />
+
+                    <label for="deskripsi_tugas">Deskripsi Tugas</label>
+                    <textarea id="deskripsi_tugas" name="deskripsi_tugas" rows="4"></textarea>
+                </div>
+                <input type="hidden" id="experience-id" name="experience_id" />
+                <button class="btn" type="submit">Simpan</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

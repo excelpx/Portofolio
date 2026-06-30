@@ -1,0 +1,63 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <section>
+        <div class="page-title">Manajemen Proyek</div>
+        <div style="margin-top:1.5rem; display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+            <p>Kelola daftar proyek portfolio.</p>
+            <button class="btn" id="open-project-modal">Tambah Proyek</button>
+        </div>
+
+        <div class="table-wrapper" style="margin-top:1.5rem;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Judul</th>
+                        <th>Link</th>
+                        <th>Gambar</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for proyek in projects %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ proyek.judul_proyek }}</td>
+                        <td>{% if proyek.link_proyek %}<a href="{{ proyek.link_proyek }}" target="_blank">Lihat</a>{% else %}-{% endif %}</td>
+                        <td>{% if proyek.gambar_url %}<a href="{{ proyek.gambar_url }}" target="_blank">Preview</a>{% else %}-{% endif %}</td>
+                        <td>
+                            <button class="btn edit-project" data-id="{{ proyek.id }}" data-judul="{{ proyek.judul_proyek }}" data-deskripsi="{{ proyek.deskripsi }}" data-link="{{ proyek.link_proyek }}">Edit</button>
+                            <button class="btn" data-id="{{ proyek.id }}" data-action="delete">Hapus</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="modal" id="project-modal">
+        <div class="modal-content">
+            <span class="modal-close" id="close-project-modal">×</span>
+            <h2 id="modal-title">Tambah Proyek</h2>
+            <form id="project-form" action="/projects/add" method="POST" enctype="multipart/form-data">
+                <div class="form-grid">
+                    <label for="judul_proyek">Judul Proyek</label>
+                    <input id="judul_proyek" name="judul_proyek" type="text" required />
+
+                    <label for="deskripsi">Deskripsi</label>
+                    <textarea id="deskripsi" name="deskripsi" rows="4" required></textarea>
+
+                    <label for="link_proyek">Link Proyek</label>
+                    <input id="link_proyek" name="link_proyek" type="url" />
+
+                    <label for="gambar">Thumbnail Proyek</label>
+                    <input id="gambar" name="gambar" type="file" accept="image/*" />
+                </div>
+                <input type="hidden" id="project-id" name="project_id" />
+                <button class="btn" type="submit">Simpan</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

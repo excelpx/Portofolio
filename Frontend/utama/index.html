@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='utama/css/style.css') }}" />
+</head>
+<body>
+    <header class="site-header">
+        <nav class="nav-container">
+            <a class="brand" href="#hero">Portfolio</a>
+            <div class="nav-links">
+                <a href="#about">Profil</a>
+                <a href="#skills">Skills</a>
+                <a href="#experience">Pengalaman</a>
+                <a href="#projects">Proyek</a>
+                <a href="#contact">Kontak</a>
+            </div>
+        </nav>
+        <section class="hero" id="hero">
+            <div class="hero-copy">
+                <p class="eyebrow">Hai, saya seorang kreatif media </p>
+                <h1>WALCOME HOME</h1>
+                <p>Selamat datang di koleksi proyek, kemampuan, serta pengalaman kerja terbaik saya.</p>
+                <a class="btn" href="#contact">Hubungi Saya</a>
+            </div>
+        </section>
+    </header>
+
+    <main>
+        <section class="section" id="about">
+            <div class="section-header">
+                <h2>Profil</h2>
+                <p>Detail profil singkat saya.</p>
+            </div>
+            <div class="profile-grid">
+                {% for profil in profil_list %}
+                <article class="profile-card">
+                    <div class="profile-media">
+                        {% if profil.foto_url %}
+                        <img src="{{ profil.foto_url }}" alt="Foto {{ profil.nama_lengkap }}" />
+                        {% endif %}
+                    </div>
+                    <div class="profile-body">
+                        <h3>{{ profil.nama_lengkap }}</h3>
+                        <p class="muted">{{ profil.jabatan }}</p>
+                        <p>{{ profil.bio }}</p>
+                        <div class="profile-links">
+                            {% if profil.link_github %}<a href="{{ profil.link_github }}" target="_blank">GitHub</a>{% endif %}
+                            {% if profil.link_linkedin %}<a href="{{ profil.link_linkedin }}" target="_blank">LinkedIn</a>{% endif %}
+                            {% if profil.link_instagram %}<a href="{{ profil.link_instagram }}" target="_blank">Instagram</a>{% endif %}
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="section section-alt" id="skills">
+            <div class="section-header">
+                <h2>Skills</h2>
+                <p>Keahlian teknis yang saya kuasai.</p>
+            </div>
+            <div class="cards-grid">
+                {% for skill in skill_list %}
+                <article class="stat-card">
+                    <h3>{{ skill.nama_skill }}</h3>
+                    <p class="muted">{{ skill.kategori_skill }}</p>
+                    <div class="progress-bar">
+                        <span style="width: {{ skill.persentase_keahlian }}%"></span>
+                    </div>
+                    <p>{{ skill.persentase_keahlian }}%</p>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="section" id="experience">
+            <div class="section-header">
+                <h2>Pengalaman</h2>
+                <p>Riwayat pekerjaan dan tanggung jawab saya.</p>
+            </div>
+            <div class="timeline">
+                {% for pengalaman in pengalaman_list %}
+                <article class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>{{ pengalaman.posisi }}</h3>
+                        <p class="muted">{{ pengalaman.nama_instansi }}</p>
+                        <p>{{ pengalaman.tanggal_mulai }} - {% if pengalaman.tanggal_selesai %}{{ pengalaman.tanggal_selesai }}{% else %}Sekarang{% endif %}</p>
+                        <p>{{ pengalaman.deskripsi_tugas }}</p>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="section section-alt" id="projects">
+            <div class="section-header">
+                <h2>Proyek</h2>
+                <p>Kumpulan proyek yang pernah saya kerjakan.</p>
+            </div>
+            <div class="project-grid">
+                {% for proyek in proyek_list %}
+                <article class="project-card">
+                    {% if proyek.gambar_url %}
+                    <div class="project-image">
+                        <img src="{{ proyek.gambar_url }}" alt="{{ proyek.judul_proyek }}" />
+                    </div>
+                    {% endif %}
+                    <div class="project-body">
+                        <h3>{{ proyek.judul_proyek }}</h3>
+                        <p>{{ proyek.deskripsi }}</p>
+                        {% if proyek.link_proyek %}
+                        <a class="link-button" href="{{ proyek.link_proyek }}" target="_blank">Lihat Proyek</a>
+                        {% endif %}
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="section" id="contact">
+            <div class="section-header">
+                <h2>Kontak</h2>
+                <p>Kirim pesan langsung melalui formulir di bawah.</p>
+            </div>
+            <div class="contact-grid">
+                <form action="/kontak" method="POST" class="contact-form">
+                    <label for="nama_pengirim">Nama</label>
+                    <input id="nama_pengirim" name="nama_pengirim" type="text" required />
+
+                    <label for="email_pengirim">Email</label>
+                    <input id="email_pengirim" name="email_pengirim" type="email" required />
+
+                    <label for="subjek">Subjek</label>
+                    <input id="subjek" name="subjek" type="text" required />
+
+                    <label for="isi_pesan">Pesan</label>
+                    <textarea id="isi_pesan" name="isi_pesan" rows="5" required></textarea>
+
+                    <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+                </form>
+                <div class="contact-info">
+                    <h3>Siap Bekerja Sama</h3>
+                    <p>Isi formulir di samping untuk memulai diskusi proyek atau kerja sama.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>© 2026 Portfolio.</p>
+    </footer>
+    <script src="{{ url_for('static', filename='utama/js/script.js') }}"></script>
+</body>
+</html>
