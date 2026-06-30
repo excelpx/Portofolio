@@ -6,4 +6,4 @@ SQLAlchemy==2.0.51
 cloudinary==1.36.0
 requests==2.31.0
 resend
-werkzeug==3.0.0
+gunicorn
